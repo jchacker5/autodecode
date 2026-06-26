@@ -33,7 +33,9 @@ uv run optimize.py > run.log 2>&1
 - Install new packages beyond `pyproject.toml`.
 - Change model weights or re-quantize (out of scope for this loop).
 
-**Goal: maximize `decode_tok_s`** (median decode tokens/sec across 3 fixed prompts). **Higher is better.**
+**Goal: maximize `decode_tok_s`** (median decode tokens/sec across 3 fixed prompts, measured over 3 eval passes). **Higher is better.**
+
+**Noise margin**: require **≥0.15 tok/s** improvement over current best before `keep` — smaller gains are likely thermal variance.
 
 **VRAM / RAM** is a soft constraint on M4 32GB — peak_memory_gb should stay under ~28 GB.
 
