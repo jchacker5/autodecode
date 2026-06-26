@@ -86,8 +86,8 @@ def run_case(
     messages: list[dict[str, str]],
     sampler: Any,
     generation_kwargs: dict[str, Any],
+    template_kwargs: dict[str, Any],
 ) -> CaseResult:
-    template_kwargs = optimize_module.chat_template_kwargs()
     prompt = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -136,13 +136,13 @@ def evaluate_decode_tps(
     mx.reset_peak_memory()
     generation_kwargs = optimize_module.build_generation_kwargs()
     sampler = optimize_module.build_sampler()
+    template_kwargs = optimize_module.chat_template_kwargs()
 
     # Warmup (not scored)
     warmup_messages = optimize_module.build_messages(
         user_text="Say hi.",
         case_name="warmup",
     )
-    template_kwargs = optimize_module.chat_template_kwargs()
     warmup_prompt = tokenizer.apply_chat_template(
         warmup_messages,
         tokenize=False,
@@ -175,6 +175,7 @@ def evaluate_decode_tps(
                 messages=messages,
                 sampler=sampler,
                 generation_kwargs=generation_kwargs,
+                template_kwargs=template_kwargs,
             )
         )
         mx.clear_cache()
