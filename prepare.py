@@ -87,10 +87,12 @@ def run_case(
     sampler: Any,
     generation_kwargs: dict[str, Any],
 ) -> CaseResult:
+    template_kwargs = optimize_module.chat_template_kwargs()
     prompt = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
         add_generation_prompt=True,
+        **template_kwargs,
     )
     max_tokens = case["max_tokens"]
     last: Any = None
@@ -140,10 +142,12 @@ def evaluate_decode_tps(
         user_text="Say hi.",
         case_name="warmup",
     )
+    template_kwargs = optimize_module.chat_template_kwargs()
     warmup_prompt = tokenizer.apply_chat_template(
         warmup_messages,
         tokenize=False,
         add_generation_prompt=True,
+        **template_kwargs,
     )
     for _ in stream_generate(
         model,

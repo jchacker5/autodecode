@@ -75,6 +75,14 @@ def build_sampler():
     )
 
 
+def chat_template_kwargs() -> dict[str, Any]:
+    """Kwargs forwarded to tokenizer.apply_chat_template."""
+    kwargs = dict(CHAT_TEMPLATE_KWARGS)
+    if not ENABLE_THINKING:
+        kwargs["enable_thinking"] = False
+    return kwargs
+
+
 def build_generation_kwargs() -> dict[str, Any]:
     kwargs: dict[str, Any] = {
         "prefill_step_size": PREFILL_STEP_SIZE,
@@ -92,16 +100,6 @@ def post_load(model: Any, tokenizer: Any) -> None:
     """Optional post-load tweaks (wired memory, model patches, etc.)."""
     if WIRED_LIMIT and mx.metal.is_available():
         mx.set_wired_limit(mx.device_info()["max_recommended_working_set_size"])
-
-    # Apply chat-template kwargs globally when supported (Qwen thinking toggle).
-    if CHAT_TEMPLATE_KWARGS:
-        original = tokenizer.apply_chat_template
-
-        def wrapped_apply_chat_template(*args, **kwargs):
-            merged = {**CHAT_TEMPLATE_KWARGS, **kwargs}
-            return original(*args, **merged)
-
-        tokenizer.apply_chat_template = wrapped_apply_chat_template  # type: ignore[method-assign]
 
 
 # ---------------------------------------------------------------------------
