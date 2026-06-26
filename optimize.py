@@ -58,7 +58,9 @@ def resolve_model_path() -> str:
 def build_messages(user_text: str, case_name: str) -> list[dict[str, str]]:
     """Format chat messages sent to the tokenizer."""
     messages: list[dict[str, str]] = []
-    if SYSTEM_PROMPT:
+    if case_name == "code_prime":
+        messages.append({"role": "system", "content": "Python only. No prose."})
+    elif SYSTEM_PROMPT:
         messages.append({"role": "system", "content": SYSTEM_PROMPT})
     messages.append({"role": "user", "content": user_text})
     return messages
