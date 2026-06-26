@@ -4,6 +4,8 @@ __pycache__/
 .DS_Store
 run.log
 results.tsv
+mlx-server.log
+.mlx-server.pid
 models/
 *.egg-info/
 dist/

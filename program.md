@@ -1,4 +1,4 @@
-# ornith-mlx-autoresearch
+# autodecode
 
 Autonomous agent loop to optimize **Ornith-9B MLX inference speed** on Apple Silicon.
 

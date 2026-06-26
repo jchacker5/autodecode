@@ -1,0 +1,23 @@
+commit	decode_tok_s	memory_gb	status	description
+4501e2c	20.449655	5.2	keep	baseline enable_thinking=false prefill2048
+f208ab1	21.369315	5.2	keep	prefill_step_size 4096
+88a4138	20.858315	5.2	discard	temperature 0 greedy
+98f8ebe	21.123322	5.2	discard	kv_bits 8 quantized_kv_start 0
+fe364dd	17.569367	5.2	discard	prefill_step_size 8192
+22ffbcf	20.402813	5.2	discard	no system prompt
+eb78597	17.841206	5.2	discard	wired_limit false
+f22ea71	18.076108	5.2	discard	prefill_step_size 6144
+fea3c2f	17.801702	5.2	discard	prefill_step_size 3072
+f0494c9	18.174745	5.3	discard	append /no_think to user messages
+26cd02a	18.511738	5.2	discard	kv_bits 4 quantize after 128 tokens
+9ae073c	19.713984	5.2	discard	seed none
+745e086	17.453142	5.2	keep	stable harness 3-pass eval prefill4096
+7482452	18.553108	5.2	keep	prefill 2048 stable harness
+dccc0cb	18.035086	5.2	discard	code-focused system prompt
+c6b89bf	20.205756	5.2	keep	case-specific system prompt for code
+0f19183	21.195178	5.2	keep	temperature 0.05
+d7f3168	21.395133	5.2	keep	case-specific prompt + temp 0.05 + prefill 2048
+efe8983	19.325311	5.2	discard	prefill 4096 + case prompt + temp0.05
+45f0c08	21.131401	5.2	discard	temp 0.0 + case prompt
+f537c5d	20.983793	5.2	discard	temp 0.02 + case prompt
+bf67b21	20.674886	5.2	discard	per-case minimal system prompts
