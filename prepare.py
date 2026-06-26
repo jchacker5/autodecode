@@ -24,7 +24,8 @@ from mlx_lm.sample_utils import make_sampler
 
 ROOT = Path(__file__).resolve().parent
 MODEL_PATH = ROOT / "models" / "ornith-9b-4bit"
-WARMUP_MAX_TOKENS = 16
+WARMUP_MAX_TOKENS = 32
+EVAL_REPEATS = 3
 TIMEOUT_SECONDS = 600
 
 BENCHMARK_CASES: list[dict[str, Any]] = [
@@ -160,36 +161,45 @@ def evaluate_decode_tps(
         pass
     mx.clear_cache()
 
-    case_results: list[CaseResult] = []
+    pass_medians: list[float] = []
+    pass_prompt_medians: list[float] = []
+    peak_mem = 0.0
+    last_case_results: list[CaseResult] = []
     t0 = time.perf_counter()
-    for case in BENCHMARK_CASES:
-        messages = optimize_module.build_messages(
-            user_text=case["user"],
-            case_name=case["name"],
-        )
-        case_results.append(
-            run_case(
-                model,
-                tokenizer,
-                case,
-                messages=messages,
-                sampler=sampler,
-                generation_kwargs=generation_kwargs,
-                template_kwargs=template_kwargs,
-            )
-        )
-        mx.clear_cache()
 
-    decode_rates = [c.decode_tok_s for c in case_results]
-    prompt_rates = [c.prompt_tok_s for c in case_results]
-    peak_mem = max(c.peak_memory_gb for c in case_results)
+    for _ in range(EVAL_REPEATS):
+        case_results: list[CaseResult] = []
+        for case in BENCHMARK_CASES:
+            messages = optimize_module.build_messages(
+                user_text=case["user"],
+                case_name=case["name"],
+            )
+            case_results.append(
+                run_case(
+                    model,
+                    tokenizer,
+                    case,
+                    messages=messages,
+                    sampler=sampler,
+                    generation_kwargs=generation_kwargs,
+                    template_kwargs=template_kwargs,
+                )
+            )
+            mx.clear_cache()
+
+        decode_rates = [c.decode_tok_s for c in case_results]
+        prompt_rates = [c.prompt_tok_s for c in case_results]
+        pass_medians.append(statistics.median(decode_rates))
+        pass_prompt_medians.append(statistics.median(prompt_rates))
+        peak_mem = max(peak_mem, max(c.peak_memory_gb for c in case_results))
+        last_case_results = case_results
 
     return BenchmarkResult(
-        decode_tok_s=statistics.median(decode_rates),
-        prompt_tok_s=statistics.median(prompt_rates),
+        decode_tok_s=statistics.median(pass_medians),
+        prompt_tok_s=statistics.median(pass_prompt_medians),
         peak_memory_gb=peak_mem,
         total_seconds=time.perf_counter() - t0,
-        case_results=case_results,
+        case_results=last_case_results,
     )
 
 

@@ -12,7 +12,7 @@ import mlx.core as mx
 from mlx_lm import load
 from mlx_lm.sample_utils import make_sampler
 
-from prepare import TIMEOUT_SECONDS, evaluate_decode_tps, verify_model_exists
+from prepare import EVAL_REPEATS, TIMEOUT_SECONDS, evaluate_decode_tps, verify_model_exists
 
 # ---------------------------------------------------------------------------
 # Hyperparameters — edit these (and helper functions below)
@@ -129,6 +129,7 @@ def main() -> None:
     print(f"load_seconds:     {load_seconds:.1f}")
     print(f"eval_seconds:     {eval_seconds:.1f}")
     print(f"total_seconds:    {total_seconds:.1f}")
+    print(f"eval_repeats:     {EVAL_REPEATS}")
     for case in result.case_results:
         print(
             f"case_{case.name}_decode_tok_s: {case.decode_tok_s:.3f} "
