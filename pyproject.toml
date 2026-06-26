@@ -1,0 +1,13 @@
+[project]
+name = "ornith-mlx-autoresearch"
+version = "0.1.0"
+description = "Karpathy-style autoresearch loop for Ornith MLX inference optimization"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mlx>=0.31.0",
+    "mlx-lm>=0.31.0",
+]
+
+[tool.uv]
+dev-dependencies = []
