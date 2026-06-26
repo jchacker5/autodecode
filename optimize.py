@@ -33,7 +33,7 @@ MIN_P = 0.0
 SEED = 42
 
 # Generation engine knobs (mlx_lm.generate_step / stream_generate)
-PREFILL_STEP_SIZE = 2048
+PREFILL_STEP_SIZE = 4096
 KV_BITS: int | None = None
 KV_GROUP_SIZE = 64
 QUANTIZED_KV_START = 5000
