@@ -26,7 +26,7 @@ ENABLE_THINKING = False
 CHAT_TEMPLATE_KWARGS: dict[str, Any] = {"enable_thinking": False}
 
 # Sampling
-TEMPERATURE = 0.1
+TEMPERATURE = 0.05
 TOP_P = 1.0
 TOP_K = 0
 MIN_P = 0.0
@@ -58,9 +58,7 @@ def resolve_model_path() -> str:
 def build_messages(user_text: str, case_name: str) -> list[dict[str, str]]:
     """Format chat messages sent to the tokenizer."""
     messages: list[dict[str, str]] = []
-    if case_name == "code_prime":
-        messages.append({"role": "system", "content": "Python only. No prose."})
-    elif SYSTEM_PROMPT:
+    if SYSTEM_PROMPT:
         messages.append({"role": "system", "content": SYSTEM_PROMPT})
     messages.append({"role": "user", "content": user_text})
     return messages
