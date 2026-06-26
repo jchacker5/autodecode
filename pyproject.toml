@@ -9,5 +9,8 @@ dependencies = [
     "mlx-lm>=0.31.0",
 ]
 
+[project.optional-dependencies]
+dev = ["matplotlib>=3.8"]
+
 [tool.uv]
-dev-dependencies = []
+dev-dependencies = ["matplotlib>=3.8"]
