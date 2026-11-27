@@ -18,7 +18,7 @@
 
 Peak memory stayed at **~5.2 GB** throughout — well within 32 GB RAM.
 
-**Headline finding:** Local LLM slowness on Mac was mostly config, not silicon. Disabling Qwen3.5 "thinking" tokens and tuning prefill/sampling beat every KV-cache hack we tried.
+**What was measured:** The tuned configuration reached 21.4 decode tokens/sec on the three fixed prompts used during tuning. This is an in-sample throughput result, not a measured improvement in latency to a correct answer, a quality-equivalent speedup, or a general MLX-vs-Ollama comparison. The winning setup disables thinking and changes sampling and the code prompt, so it can produce different answers and lengths. The score did not check correctness.
 
 ---
 
@@ -32,7 +32,7 @@ Fixed prompts in `prepare.py`:
 | `short_qa` | Capital of France, one word | 8 |
 | `json_extract` | Compact JSON extract | 32 |
 
-Eval protocol (added mid-run for stability):
+Eval protocol (added mid-run for stability; do not compare across the protocol change as if the harness were fixed):
 
 - 32-token warmup (not scored)
 - 3 full benchmark passes; median of pass-medians = `decode_tok_s`
